@@ -1,0 +1,47 @@
+<% provide(:title, "Sign in")%>
+<div class="items-start justify-center block h-full grid-cols-1 gap-4 lg:grid lg:items-center lg:grid-cols-2">
+  <div class="relative flex items-center justify-center h-32 overflow-hidden lg:h-screen bg-gradient-to-tr from-black to-gray-800">
+    <div class="inset-auto z-30 flex items-center justify-center flex-1 w-full h-auto font-sans text-center text-white shadow lg:flex lg:h-screen lg:absolute xl:text-5xl">
+      <h1 class="font-semibold text-4xl text-green-300">CampaignX</h1>
+    </div>
+  </div>
+  <div>
+    <div class="relative z-20 px-6 mx-auto lg:px-12 max-w-lg">
+      <div class="mb-4 xl:mt-8">
+        <div class="mt-6 mb-4 lg:mt-0">
+          <%= link_to root_path, class: "text-gray-600 underline flex items-center hover:text-gray-700 hover:no-underline no-underline" do %>
+            <i class="fa-solid fa-circle-arrow-left mr-2 text-gray-500"></i> Back
+          <% end %>
+        </div>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }) do |f| %>
+
+          <div class="mb-6">
+            <%= f.label :email, class: label_class %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: input_class %>
+          </div>
+
+          <div class="mb-6">
+            <%= f.label :password, class: label_class %>
+            <%= f.password_field :password, autocomplete: "current-password", class: input_class %>
+          </div>
+
+          <div class="mb-6">
+            <% if devise_mapping.rememberable? %>
+              <%= f.check_box :remember_me, class: checkbox_class %>
+              <%= f.label :remember_me, class: "text-gray-400" %>
+            <% end %>
+          </div>
+
+          <div class="mb-6">
+            <%= button_tag(type: "submit", class: "p-3 w-full block bg-green-400 text-black shadow-sm hover:bg-green-500 font-semibold shadow-sm") do %>
+              <i class="fa-solid fa-paper-plane"></i> Sign In
+            <% end %>
+          </div>
+      <% end %>
+
+      <%= render "devise/shared/links" %>
+    </div>
+  </div>
+</div>
