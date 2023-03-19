@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'users/profile'
+  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   devise_for :users
 
@@ -6,6 +8,7 @@ Rails.application.routes.draw do
     authenticated :user do
       root to: "pages#dashboard", as: :authenticated_root
       get '/users', to: 'devise/registrations#edit'
+      get '/profile', to: 'users#profile', as: :profile
     end
 
     unauthenticated do

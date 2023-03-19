@@ -17,6 +17,7 @@ gem "bootsnap", require: false
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'rake-performance', '~> 0.1.0'
 end
 
 group :development do
@@ -28,3 +29,5 @@ end
 gem "tailwindcss-rails", "~> 2.0"
 gem "devise", "~> 4.9"
 gem 'name_of_person', '~> 1.1', '>= 1.1.1'
+gem 'rails_admin', '~> 3.1', '>= 3.1.1'
+gem "sassc-rails"

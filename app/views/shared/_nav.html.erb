@@ -14,8 +14,8 @@
     <div class="items-center block w-full mt-2 text-center lg:flex lg:flex-row lg:flex-1 lg:mt-0 lg:text-left lg:justify-end">
       <div><%# More links can go here %></div>
       <% if user_signed_in? %>
-        <%= link_to edit_user_registration_path, class: "p-3 hover:bg-gray-50 transition ease duration-300 rounded-lg text-center focus:bg-gray-100 lg:inline-block block" do %>
-          <i class="fa-solid fa-gear text-gray-500"></i> Account Settings
+        <%= link_to profile_path(@user), class: "p-3 hover:bg-gray-50 transition ease duration-300 rounded-lg text-center focus:bg-gray-100 lg:inline-block block" do %>
+          <i class="fa-solid fa-circle-user text-gray-500"></i> <%= current_user.name.full %>
         <% end %>
 
         <%= button_to destroy_user_session_path, method: :delete, class:"p-3 hover:bg-gray-50 transition ease duration-300 rounded-lg text-center focus:bg-gray-100 lg:inline-block block" do %>

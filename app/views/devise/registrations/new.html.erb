@@ -25,6 +25,11 @@
         </div>
 
         <div class="mb-2">
+          <%= f.label :brand, class: label_class %>
+          <%= f.text_field :brand, class: input_class %>
+        </div>
+
+        <div class="mb-2">
           <%= f.label :email, class: label_class %>
           <%= f.email_field :email, autocomplete: "email", class: input_class %>
         </div>
