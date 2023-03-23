@@ -11,6 +11,7 @@ class User < ApplicationRecord
 
   has_one :wallet
   has_many :audiences, dependent: :destroy
+  has_many :campaigns, dependent: :destroy
 
   after_create :assign_wallet
 

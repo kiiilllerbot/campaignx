@@ -1,0 +1,37 @@
+<div id="<%= dom_id campaign %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Title:</strong>
+    <%= campaign.title %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Message:</strong>
+    <%= campaign.message %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Url:</strong>
+    <%= campaign.url %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Short url:</strong>
+    <%= campaign.short_url %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Clicks:</strong>
+    <%= campaign.clicks %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">User:</strong>
+    <%= campaign.user_id %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this campaign", campaign, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to 'Edit this campaign', edit_campaign_path(campaign), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

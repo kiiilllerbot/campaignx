@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :campaigns, only: [:index, :new, :create, :show]
   resources :audiences
   get 'users/profile'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

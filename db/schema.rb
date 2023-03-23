@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_23_005318) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_23_132913) do
   create_table "audiences", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -20,6 +20,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_005318) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_audiences_on_user_id"
+  end
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string "title"
+    t.text "message"
+    t.string "url"
+    t.string "short_url"
+    t.string "clicks"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -65,5 +77,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_005318) do
   end
 
   add_foreign_key "audiences", "users"
+  add_foreign_key "campaigns", "users"
   add_foreign_key "wallets", "users"
 end

@@ -1,0 +1,36 @@
+<%= form_with(model: campaign, class: "contents") do |form| %>
+  <% if campaign.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <ul>
+        <% campaign.errors.each do |error| %>
+          <li><i class="fa-sharp fa-regular fa-circle-dot"></i> <%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :title, :class=> label_class %>
+    <%= form.text_field :title, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :message, :class=> label_class %>
+    <%= form.text_area :message, rows: 4, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :url, :class=> label_class %>
+    <%= form.text_field :url, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.hidden_field :user_id %>
+  </div>
+
+  <div class="inline">
+    <%= button_tag(type: "submit", class: "rounded-lg py-3 px-5 bg-gray-700 text-white inline-block font-medium cursor-pointer") do %>
+      <i class="fa-solid fa-circle-check"></i> Create Campaign
+    <% end %>
+  </div>
+<% end %>
