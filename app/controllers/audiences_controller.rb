@@ -3,8 +3,13 @@ class AudiencesController < ApplicationController
   before_action :set_audience, only: %i[ show edit update destroy ]
 
   def index
-    all_audiences = Audience.all.order(created_at: :desc)
-    @audiences = Kaminari.paginate_array(all_audiences).page(params[:page]).per(10)
+    if params[:search]
+      all_audiences = Audience.all.order(created_at: :desc).where(["name like ?", "%#{params[:search]}%"])
+      @audiences = Kaminari.paginate_array(all_audiences).page(params[:page]).per(10)
+    else
+      all_audiences = Audience.all.order(created_at: :desc)
+      @audiences = Kaminari.paginate_array(all_audiences).page(params[:page]).per(10)
+    end
   end
 
   def show

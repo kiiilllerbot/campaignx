@@ -10,7 +10,9 @@
           <% end %>
         </div>
         <div>
-          <input type="text" id="search-input" class="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" placeholder="Search your audience">
+        <%= form_tag audiences_path, method: :get do %>
+          <%= text_field_tag :search, params[:search], :class=>'block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full', placeholder: 'Search your audience'%>
+        <% end %>
         </div>
       </div>
       <div class="p-0">
@@ -65,19 +67,3 @@
     </div>
   </div>
 </div>
-
-<script>
-$(document).on("turbolinks:load", function () {
-  $("#search-input").on("input", function () {
-    var searchTerm = $(this).val();
-
-    $.ajax({
-      url: "/audiences/search",
-      data: { q: searchTerm },
-      success: function (data) {
-        $("#audiences-table tbody").html(data);
-      },
-    });
-  });
-});
-</script>
