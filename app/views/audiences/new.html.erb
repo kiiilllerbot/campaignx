@@ -1,0 +1,15 @@
+<% provide(:title, "New Audience")%>
+
+<div class="flex container mx-auto px-4 mt-3">
+  <div class="w-full">
+    <div class="w-full mx-auto my-4 bg-white shadow-xl rounded-xl">
+      <div class="p-6">
+        <h1 class="font-bold text-2xl text-gray-500">Add New audience</h1>
+        <%= render "form", audience: @audience %>
+        <%= link_to audiences_path, class: "ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" do %>
+          <i class="fa-solid fa-angle-left"></i> Back
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

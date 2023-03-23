@@ -1,0 +1,83 @@
+<% provide(:title, "All Audiences")%>
+
+<div class="flex container mx-auto px-4 mt-3">
+  <div class="w-full">
+    <div class="w-full mx-auto my-4">
+      <div class="flex justify-between my-3">
+        <div>
+          <%= link_to new_audience_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" do %>
+            <i class="fa-solid fa-plus"></i> Add Audience
+          <% end %>
+        </div>
+        <div>
+          <input type="text" id="search-input" class="block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" placeholder="Search your audience">
+        </div>
+      </div>
+      <div class="p-0">
+        <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="audiences_table">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-circle-user"></i>  Name
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-envelope-open"></i>  Email
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-square-phone"></i>  Contact Number
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-calendar-day"></i>  Date Added
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-gear"></i>  Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% @audiences.each.with_index(1) do |audience| %>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <td class="px-6 py-4">
+                            <%= audience.name %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= audience.email %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= audience.contact_number %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= audience.created_at.strftime("%B, %d, %Y") %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= link_to audience, :class=>"px-4 py-2 bg-green-400 rounded-full text-black" do %>
+                              <i class="fa-regular fa-circle-right"></i> View Audience
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                </table>
+            </div>
+        <%= paginate @audiences, :class=>"bg-gray-700"%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).on("turbolinks:load", function () {
+  $("#search-input").on("input", function () {
+    var searchTerm = $(this).val();
+
+    $.ajax({
+      url: "/audiences/search",
+      data: { q: searchTerm },
+      success: function (data) {
+        $("#audiences-table tbody").html(data);
+      },
+    });
+  });
+});
+</script>

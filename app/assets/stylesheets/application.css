@@ -13,3 +13,14 @@
  *= require_tree .
  *= require_self
  */
+
+.pagination {
+  margin: 15px 0px;
+}
+
+.pagination a {
+  color: #f1f1f1;
+  padding: 8px 10px;
+  background-color: rgb(55 65 81);
+  border-radius: 5px;
+}

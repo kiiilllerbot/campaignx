@@ -1,0 +1,36 @@
+<%= form_with(model: audience, class: "contents") do |form| %>
+  <% if audience.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <ul>
+        <% audience.errors.each do |error| %>
+          <li><i class="fa-sharp fa-regular fa-circle-dot"></i> <%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :name, :class=> label_class %>
+    <%= form.text_field :name, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :email, :class=> label_class %>
+    <%= form.text_field :email, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <label class="<%= label_class%>">Contact Number</label>
+    <%= form.text_field :contact_number, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-1 w-full" %>
+  </div>
+
+  <div class="my-5">
+    <%= form.hidden_field :user_id %>
+  </div>
+
+  <div class="inline">
+    <%= button_tag(type: "submit", class: "rounded-lg py-3 px-5 bg-gray-700 text-white inline-block font-medium cursor-pointer") do %>
+      <i class="fa-solid fa-circle-check"></i> <%= action_name == "new" ? "Create" : "Update"%> Audience
+    <% end %>
+  </div>
+<% end %>

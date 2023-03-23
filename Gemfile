@@ -31,3 +31,5 @@ gem "devise", "~> 4.9"
 gem 'name_of_person', '~> 1.1', '>= 1.1.1'
 gem 'rails_admin', '~> 3.1', '>= 3.1.1'
 gem "sassc-rails"
+gem 'acts_as_paranoid', '~> 0.8.1'
+gem 'kaminari', '~> 1.2', '>= 1.2.2'

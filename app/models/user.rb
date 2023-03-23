@@ -10,6 +10,7 @@ class User < ApplicationRecord
   validates_presence_of :contact_number
 
   has_one :wallet
+  has_many :audiences, dependent: :destroy
 
   after_create :assign_wallet
 
