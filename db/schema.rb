@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_23_132913) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
   create_table "audiences", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -20,6 +20,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_132913) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_audiences_on_user_id"
+  end
+
+  create_table "broadcasts", force: :cascade do |t|
+    t.string "receiver_name"
+    t.string "receiver_email"
+    t.string "receiver_contact_number"
+    t.string "message_status"
+    t.json "vonage_response"
+    t.integer "user_id", null: false
+    t.integer "campaign_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["campaign_id"], name: "index_broadcasts_on_campaign_id"
+    t.index ["user_id"], name: "index_broadcasts_on_user_id"
   end
 
   create_table "campaigns", force: :cascade do |t|
@@ -77,6 +91,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_132913) do
   end
 
   add_foreign_key "audiences", "users"
+  add_foreign_key "broadcasts", "campaigns"
+  add_foreign_key "broadcasts", "users"
   add_foreign_key "campaigns", "users"
   add_foreign_key "wallets", "users"
 end
