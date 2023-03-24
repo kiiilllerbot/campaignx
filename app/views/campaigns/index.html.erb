@@ -36,7 +36,11 @@
                             <%= campaign.title %> <%= campaign.message %> <%= campaign.short_url %>
                           </td>
                           <td class="px-6 py-4">
-                            <%= campaign.clicks.present? ? campaign.clicks : 0 %>
+                            <% if campaign.clicks.present? && campaign.clicks.to_i > 0 %>
+                              <div class="text-green-400"><%= campaign.clicks %></div>
+                            <% else %>
+                              <div class="text-yellow-400">0</div>
+                            <% end %>
                           </td>
                           <td class="px-6 py-4">
                             <%= campaign.created_at.strftime("%B, %d, %Y") %>
