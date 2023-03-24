@@ -3,6 +3,7 @@ class CampaignsController < ApplicationController
   before_action :set_campaign, only: %i[ show ]
 
   require "bitly"
+  require 'vonage'
 
   def index
     all_campaigns = Campaign.all.order(created_at: :desc)
@@ -19,66 +20,76 @@ class CampaignsController < ApplicationController
   end
 
   def create
-    @campaign = current_user.campaigns.build(campaign_params)
-    url = params[:campaign][:url]
+    if current_user.wallet.balance > current_user.audiences.count
+      @campaign = current_user.campaigns.build(campaign_params)
+      url = params[:campaign][:url]
 
-    if url.present? && valid_url?(url)
-      begin
-        client = Bitly::API::Client.new(token: '6038f593b082f2b5811a944da9e644814a131a12')
-        bitlink = client.shorten(long_url: url)
-        short_url = bitlink.link
+      if url.present? && valid_url?(url)
+        begin
+          client = Bitly::API::Client.new(token: '6038f593b082f2b5811a944da9e644814a131a12')
+          bitlink = client.shorten(long_url: url)
+          short_url = bitlink.link
 
-        rescue Bitly::Error => e
-          logger.error("Bitly API Error: #{e.message}")
+          rescue Bitly::Error => e
+            logger.error("Bitly API Error: #{e.message}")
 
-          flash[:error] = "Failed to create Campaign"
-            redirect_to root_path
-          return url
-        end
-
-      else
-      short_url = ''
-    end
-
-    @campaign.short_url = short_url
-    full_message = "#{@campaign.title} #{@campaign.message} #{@campaign.short_url}"
-
-    respond_to do |format|
-      if @campaign.save
-        audiences = current_user.audiences.limit(1)
-
-        audiences.each do |audience|
-          # Send SMS
-          client = Vonage::Client.new
-          response = client.sms.send(
-            from: '0174216717',
-            to: audience.contact_number,
-            text: full_message
-          )
-
-          message_id = response["messages"][0]["message_id"]
-          if response["messages"][0]["status"] == "0"
-            puts "SMS sent successfully."
-          else
-            puts "SMS failed to send."
+            flash[:error] = "Failed to create Campaign"
+              redirect_to root_path
+            return url
           end
 
-          Broadcast.create(
-            receiver_name: audience.name,
-            receiver_email: audience.email,
-            receiver_contact_number: audience.contact_number,
-            user_id: current_user.id,
-            campaign_id: @campaign.id,
-            message_id: message_id
-          )
-        end
-
-        format.html { redirect_to campaign_url(@campaign), notice: "Campaign was successfully created." }
-        format.json { render :show, status: :created, location: @campaign }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @campaign.errors, status: :unprocessable_entity }
+        else
+        short_url = ''
       end
+
+      @campaign.short_url = short_url
+      full_message = "#{@campaign.title} #{@campaign.message} #{@campaign.short_url}"
+
+      respond_to do |format|
+        if @campaign.save
+          audiences = current_user.audiences.limit(1)
+
+          audiences.each do |audience|
+            # Send SMS
+            client = Vonage::Client.new(api_key: '08b0e4dc', api_secret: 'whKYHVysVMO8Eh49')
+            response = client.sms.send(
+              from: '0174216717',
+              to: audience.contact_number,
+              text: full_message
+            )
+
+            message_id = response["messages"][0]["message_id"]
+            if response["messages"][0]["status"] == "0"
+              puts "SMS sent successfully."
+            else
+              puts "SMS failed to send."
+            end
+
+            Broadcast.create(
+              receiver_name: audience.name,
+              receiver_email: audience.email,
+              receiver_contact_number: audience.contact_number,
+              user_id: current_user.id,
+              campaign_id: @campaign.id,
+              message_id: message_id
+            )
+          end
+
+          # Update wallet
+          total_charge = current_user.audiences.count
+          wallet = current_user.wallet
+          wallet_balance = wallet.balance
+          wallet.update_attribute(:balance, wallet_balance - total_charge)
+
+          format.html { redirect_to campaign_url(@campaign), notice: "Campaign was successfully created." }
+          format.json { render :show, status: :created, location: @campaign }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @campaign.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      redirect_to root_path, alert: 'Insufficient wallet balance'
     end
   end
 
