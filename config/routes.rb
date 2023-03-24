@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  # Vonage SMS Delivery Receipt
+  resources :sms_delivery_receipts, only: [:create]
+  
   resources :campaigns, only: [:index, :new, :create, :show]
   resources :audiences
   get 'users/profile'

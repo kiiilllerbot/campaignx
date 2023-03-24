@@ -6,6 +6,7 @@ class CreateBroadcasts < ActiveRecord::Migration[7.0]
       t.string :receiver_contact_number
       t.string :message_status
       t.json :vonage_response
+      t.string :message_id
       t.references :user, null: false, foreign_key: true
       t.references :campaign, null: false, foreign_key: true
 

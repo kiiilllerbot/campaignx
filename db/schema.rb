@@ -28,6 +28,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
     t.string "receiver_contact_number"
     t.string "message_status"
     t.json "vonage_response"
+    t.string "message_id"
     t.integer "user_id", null: false
     t.integer "campaign_id", null: false
     t.datetime "created_at", null: false

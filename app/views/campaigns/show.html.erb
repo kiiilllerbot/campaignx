@@ -45,7 +45,15 @@
                             <%= broadcast.receiver_contact_number %>
                           </td>
                           <td class="px-6 py-4">
-                            <%= broadcast.message_status %>
+                            <% if broadcast.message_status.present? %>
+                              <div class="px-3 py-2 rounded-md bg-green-400 text-black">
+                                Sent
+                              </div>
+                            <% else %>
+                              <div class="px-3 py-2 rounded-md bg-yellow-400 text-black">
+                                Pending
+                              </div>
+                            <% end %>
                           </td>
                           <td class="px-6 py-4">
                             <%= broadcast.created_at.strftime("%B, %d, %Y") %>

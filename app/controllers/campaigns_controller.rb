@@ -41,16 +41,35 @@ class CampaignsController < ApplicationController
     end
 
     @campaign.short_url = short_url
+    full_message = "#{@campaign.title} #{@campaign.message} #{@campaign.short_url}"
 
     respond_to do |format|
       if @campaign.save
-        current_user.audiences.all.each do |audience|
-          b = Broadcast.create(
+        audiences = current_user.audiences.limit(1)
+
+        audiences.each do |audience|
+          # Send SMS
+          client = Vonage::Client.new
+          response = client.sms.send(
+            from: '0174216717',
+            to: audience.contact_number,
+            text: full_message
+          )
+
+          message_id = response["messages"][0]["message_id"]
+          if response["messages"][0]["status"] == "0"
+            puts "SMS sent successfully."
+          else
+            puts "SMS failed to send."
+          end
+
+          Broadcast.create(
             receiver_name: audience.name,
             receiver_email: audience.email,
             receiver_contact_number: audience.contact_number,
             user_id: current_user.id,
-            campaign_id: @campaign.id
+            campaign_id: @campaign.id,
+            message_id: message_id
           )
         end
 

@@ -70,6 +70,7 @@ Rails.application.configure do
 
   # Devise Action Mailer And Letter Opener Config
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.hosts << "d872-113-211-208-107.ap.ngrok.io"
 
   config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.perform_deliveries = true
