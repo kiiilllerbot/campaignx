@@ -42,3 +42,74 @@
     </div>
   </div>
 </section>
+
+<section class="flex container mx-auto px-4 justify-center items-center">
+  <div class="w-full">
+    <div class="w-full mx-auto my-4 bg-white">
+      <div class="p-0">
+        <span class="mb-8 text-xs font-semibold tracking-widest text-black uppercase"><i class="fa-regular fa-message"></i> All Message Transactions</span>
+        <div class="p-0 mt-2">
+          <div class="relative overflow-x-auto">
+                  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="audiences_table">
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                          <tr>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-circle-user"></i>  Name
+                              </th>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-envelope-open"></i>  Email
+                              </th>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-square-phone"></i>  Contact Number
+                              </th>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-paper-plane"></i>  Messaging
+                              </th>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-at"></i>  Mailing
+                              </th>
+                              <th scope="col" class="px-6 py-3">
+                                <i class="fa-solid fa-calendar-day"></i>  Date
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                        <% @broadcasts.each do |broadcast| %>
+                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="px-6 py-4">
+                              <%= broadcast.receiver_name %>
+                            </td>
+                            <td class="px-6 py-4">
+                              <%= broadcast.receiver_email %>
+                            </td>
+                            <td class="px-6 py-4">
+                              <%= broadcast.receiver_contact_number %>
+                            </td>
+                            <td class="px-6 py-4">
+                              <% if broadcast.message_status.present? %>
+                                <div class="px-3 py-2 rounded-md bg-green-400 text-black">
+                                  Sent
+                                </div>
+                              <% else %>
+                                <div class="px-3 py-2 rounded-md bg-yellow-400 text-black">
+                                  Pending
+                                </div>
+                              <% end %>
+                            </td>
+                            <td class="px-6 py-4">
+                              Email
+                            </td>
+                            <td class="px-6 py-4">
+                              <%= broadcast.created_at.strftime("%B, %d, %Y") %>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </tbody>
+                  </table>
+              <%= paginate @broadcasts, :class=>"bg-gray-700"%>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
