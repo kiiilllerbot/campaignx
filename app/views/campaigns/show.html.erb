@@ -1,4 +1,4 @@
-<% provide(:title, "Campaign Overview")%>
+<% provide(:title, "Your Campaign")%>
 
 <div class="flex container mx-auto px-4 mt-3">
   <div class="w-full">
@@ -8,6 +8,9 @@
           <%= link_to new_campaign_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" do %>
             <i class="fa-solid fa-plus"></i> Create Campaign
           <% end %>
+        </div>
+        <div class="text-xs text-gray-600">
+          <i class="fa-solid fa-database"></i> Total <%= @all_broadcasts.count %> Broadcasts Found
         </div>
       </div>
       <div class="p-0">

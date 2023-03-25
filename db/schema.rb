@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_25_023153) do
   create_table "audiences", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -49,6 +49,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
+  create_table "transactions", force: :cascade do |t|
+    t.integer "amount"
+    t.string "transaction_type"
+    t.integer "user_id", null: false
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_transactions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -76,6 +86,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
@@ -95,5 +106,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_23_141000) do
   add_foreign_key "broadcasts", "campaigns"
   add_foreign_key "broadcasts", "users"
   add_foreign_key "campaigns", "users"
+  add_foreign_key "transactions", "users"
   add_foreign_key "wallets", "users"
 end

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       root to: "pages#dashboard", as: :authenticated_root
       get '/users', to: 'devise/registrations#edit'
       get '/profile', to: 'users#profile', as: :profile
+      get '/transactions', to: 'pages#transactions', as: :transactions
     end
 
     unauthenticated do

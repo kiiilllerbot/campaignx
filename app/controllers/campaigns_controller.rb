@@ -6,13 +6,13 @@ class CampaignsController < ApplicationController
   require 'vonage'
 
   def index
-    all_campaigns = Campaign.all.order(created_at: :desc)
-    @campaigns = Kaminari.paginate_array(all_campaigns).page(params[:page]).per(10)
+    @all_campaigns = current_user.campaigns.all.order(created_at: :desc)
+    @campaigns = Kaminari.paginate_array(@all_campaigns).page(params[:page]).per(10)
   end
 
   def show
-    all_broadcasts = Broadcast.all.where(campaign_id: @campaign.id).order(created_at: :desc)
-    @broadcasts = Kaminari.paginate_array(all_broadcasts).page(params[:page]).per(10)
+    @all_broadcasts = Broadcast.all.where(campaign_id: @campaign.id).order(created_at: :desc)
+    @broadcasts = Kaminari.paginate_array(@all_broadcasts).page(params[:page]).per(10)
   end
 
   def new
@@ -51,19 +51,19 @@ class CampaignsController < ApplicationController
 
           audiences.each do |audience|
             # Send SMS
-            client = Vonage::Client.new(api_key: '08b0e4dc', api_secret: 'whKYHVysVMO8Eh49')
-            response = client.sms.send(
-              from: '0174216717',
-              to: audience.contact_number,
-              text: @full_message
-            )
+            # client = Vonage::Client.new(api_key: '08b0e4dc', api_secret: 'whKYHVysVMO8Eh49')
+            # response = client.sms.send(
+            #   from: '0174216717',
+            #   to: audience.contact_number,
+            #   text: @full_message
+            # )
 
-            message_id = response["messages"][0]["message_id"]
-            if response["messages"][0]["status"] == "0"
-              puts "SMS sent successfully."
-            else
-              puts "SMS failed to send."
-            end
+            # message_id = response["messages"][0]["message_id"]
+            # if response["messages"][0]["status"] == "0"
+            #   puts "SMS sent successfully."
+            # else
+            #   puts "SMS failed to send."
+            # end
 
             Broadcast.create(
               receiver_name: audience.name,
@@ -71,7 +71,7 @@ class CampaignsController < ApplicationController
               receiver_contact_number: audience.contact_number,
               user_id: current_user.id,
               campaign_id: @campaign.id,
-              message_id: message_id
+              #message_id: message_id
             )
             
             BroadcastWorker.perform_in(1.minute, current_user.id, audience.id, @campaign.title, @full_message)
@@ -82,6 +82,9 @@ class CampaignsController < ApplicationController
           wallet = current_user.wallet
           wallet_balance = wallet.balance
           wallet.update_attribute(:balance, wallet_balance - total_charge)
+
+          # Add to transaction record
+          Transaction.create(amount: total_charge, transaction_type: 'Campaign', user_id: current_user.id, rails_admin: "0")
 
           format.html { redirect_to campaign_url(@campaign), notice: "Campaign was successfully created." }
           format.json { render :show, status: :created, location: @campaign }

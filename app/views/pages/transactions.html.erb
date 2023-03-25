@@ -1,0 +1,63 @@
+<% provide(:title, "All Transactions")%>
+
+<div class="flex container mx-auto px-4 mt-3">
+  <div class="w-full">
+    <div class="w-full mx-auto my-4">
+      <div class="flex justify-between my-3  items-center">
+        <div>
+          <%= link_to root_path, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" do %>
+            <i class="fa-solid fa-arrow-left"></i> Back
+          <% end %>
+        </div>
+        <div class="text-xs text-gray-600">
+          <i class="fa-solid fa-database"></i> Total <%= @all_transactions.count %> Transactions Found
+        </div>
+      </div>
+      <div class="p-0">
+        <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400" id="audiences_table">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-calendar-days mr-1"></i> Date
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-clock mr-1"></i> Time
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-swatchbook mr-1"></i>  Transaction Type
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                              <i class="fa-solid fa-sack-dollar mr-1"></i>  Amount
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <% @transactions.each do |transaction| %>
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                          <td class="px-6 py-4">
+                            <%= transaction.created_at.strftime("%B, %d, %Y") %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= transaction.created_at.strftime("%I:%M %p") %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <%= transaction.transaction_type %>
+                          </td>
+                          <td class="px-6 py-4">
+                            <% if transaction.transaction_type == 'Campaign' %>
+                              <div class="bg-red-400 text-black rounded-lg px-2"><i class="fa-solid fa-minus"></i> <%= transaction.amount %></div>
+                            <% elsif transaction.transaction_type == 'Topup' %>
+                              <div class="bg-green-400 text-black rounded-lg px-2"><i class="fa-solid fa-plus"></i> <%= transaction.amount %></div>
+                            <% end %>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                </table>
+            </div>
+        <%= paginate @transactions, :class=>"bg-gray-700"%>
+      </div>
+    </div>
+  </div>
+</div>

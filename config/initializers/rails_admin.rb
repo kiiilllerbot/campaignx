@@ -42,4 +42,17 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  config.model "Transaction" do
+    create do
+      field :amount
+      field :transaction_type, :enum do
+        label "Transaction Type"
+        enum do
+          ["Campaign", "Topup"]
+        end
+      end
+      field :user
+    end
+  end
 end
