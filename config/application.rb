@@ -33,5 +33,9 @@ module CampaignX
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    # Enable Sidekiq adapter
+    config.active_job.queue_adapter = :sidekiq
+    # redis
+    config.redis = { url: 'redis://localhost:6379/0' }
   end
 end

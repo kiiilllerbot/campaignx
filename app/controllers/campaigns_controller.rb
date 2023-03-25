@@ -43,11 +43,11 @@ class CampaignsController < ApplicationController
       end
 
       @campaign.short_url = short_url
-      full_message = "#{@campaign.title} #{@campaign.message} #{@campaign.short_url}"
+      @full_message = "#{@campaign.title} #{@campaign.message} #{@campaign.short_url}"
 
       respond_to do |format|
         if @campaign.save
-          audiences = current_user.audiences.limit(1)
+          audiences = current_user.audiences.all
 
           audiences.each do |audience|
             # Send SMS
@@ -55,7 +55,7 @@ class CampaignsController < ApplicationController
             response = client.sms.send(
               from: '0174216717',
               to: audience.contact_number,
-              text: full_message
+              text: @full_message
             )
 
             message_id = response["messages"][0]["message_id"]
@@ -73,6 +73,8 @@ class CampaignsController < ApplicationController
               campaign_id: @campaign.id,
               message_id: message_id
             )
+            
+            BroadcastWorker.perform_in(1.minute, current_user.id, audience.id, @campaign.title, @full_message)
           end
 
           # Update wallet
