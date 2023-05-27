@@ -51,19 +51,19 @@ class CampaignsController < ApplicationController
 
           audiences.each do |audience|
             # Send SMS
-            # client = Vonage::Client.new(api_key: '08b0e4dc', api_secret: 'whKYHVysVMO8Eh49')
-            # response = client.sms.send(
-            #   from: '0174216717',
-            #   to: audience.contact_number,
-            #   text: @full_message
-            # )
+            client = Vonage::Client.new(api_key: '08b0e4dc', api_secret: 'whKYHVysVMO8Eh49')
+            response = client.sms.send(
+              from: '0174216717',
+              to: audience.contact_number,
+              text: @full_message
+            )
 
-            # message_id = response["messages"][0]["message_id"]
-            # if response["messages"][0]["status"] == "0"
-            #   puts "SMS sent successfully."
-            # else
-            #   puts "SMS failed to send."
-            # end
+            message_id = response["messages"][0]["message_id"]
+            if response["messages"][0]["status"] == "0"
+              puts "SMS sent successfully."
+            else
+              puts "SMS failed to send."
+            end
 
             Broadcast.create(
               receiver_name: audience.name,
@@ -71,7 +71,7 @@ class CampaignsController < ApplicationController
               receiver_contact_number: audience.contact_number,
               user_id: current_user.id,
               campaign_id: @campaign.id,
-              #message_id: message_id
+              message_id: message_id
             )
             
             BroadcastWorker.perform_in(1.minute, current_user.id, audience.id, @campaign.title, @full_message)
